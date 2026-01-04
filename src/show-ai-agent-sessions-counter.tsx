@@ -117,16 +117,16 @@ export default function Command() {
         onAction={handleToggleExtension}
       />
       <MenuBarExtra.Item
-        title="Reset Merits"
-        icon={Icon.Trash}
-        shortcut={{ modifiers: ["cmd", "shift"], key: "r" }}
-        onAction={handleResetMerits}
-      />
-      <MenuBarExtra.Item
         title="Reset Session Count"
         icon={Icon.RotateAntiClockwise}
         shortcut={{ modifiers: ["cmd"], key: "r" }}
         onAction={handleReset}
+      />
+      <MenuBarExtra.Item
+        title="Reset Merits"
+        icon={Icon.Trash}
+        shortcut={{ modifiers: ["cmd", "shift"], key: "r" }}
+        onAction={handleResetMerits}
       />
     </MenuBarExtra>
   );
