@@ -1,4 +1,4 @@
-import { Color, Icon, MenuBarExtra } from "@raycast/api";
+import { Alert, Color, confirmAlert, Icon, MenuBarExtra } from "@raycast/api";
 import { useCachedPromise } from "@raycast/utils";
 import {
   getCount,
@@ -72,6 +72,19 @@ export default function Command() {
   };
 
   const handleResetMerits = async () => {
+    if (
+      !(await confirmAlert({
+        title: "Reset Lifetime Merits?",
+        message: "This action cannot be undone.",
+        primaryAction: {
+          title: "Reset",
+          style: Alert.ActionStyle.Destructive,
+        },
+      }))
+    ) {
+      return;
+    }
+
     await mutateSessions(
       (async () => {
         await resetMerits();
