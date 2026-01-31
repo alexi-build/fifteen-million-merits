@@ -1,4 +1,4 @@
-import { Alert, Color, confirmAlert, Icon, MenuBarExtra } from "@raycast/api";
+import { Alert, Color, confirmAlert, environment, Icon, MenuBarExtra, open } from "@raycast/api";
 import { useCachedPromise } from "@raycast/utils";
 import {
   getCount,
@@ -100,44 +100,61 @@ export default function Command() {
     });
   };
 
+  const handleOpenStateFile = async () => {
+    await open(environment.supportPath);
+  };
+
   return (
-    <MenuBarExtra
-      icon={icon}
-      isLoading={isEnabledLoading || isSessionsLoading}
-      title={count !== undefined ? (isExtensionEnabled ? `${count}` : ``) : undefined}
-    >
-      <MenuBarExtra.Item title={`Active Sessions: ${count}`} icon={Icon.Circle} />
-      <MenuBarExtra.Item title={`Lifetime Merits: ${merits}`} icon={Icon.Stars} />
-      <MenuBarExtra.Item
-        title="Increment Session Count"
-        icon={Icon.Plus}
-        shortcut={{ modifiers: ["cmd"], key: "i" }}
-        onAction={() => handleUpdate(1)}
-      />
-      <MenuBarExtra.Item
-        title="Decrement Session Count"
-        icon={Icon.Minus}
-        shortcut={{ modifiers: ["cmd"], key: "d" }}
-        onAction={() => handleUpdate(-1)}
-      />
-      <MenuBarExtra.Item
-        title={isExtensionEnabled ? "Enabled (toggle to disable)" : "Disabled (toggle to enable)"}
-        icon={isExtensionEnabled ? Icon.Checkmark : Icon.XMarkCircle}
-        shortcut={{ modifiers: ["cmd"], key: "t" }}
-        onAction={handleToggleExtension}
-      />
-      <MenuBarExtra.Item
-        title="Reset Session Count"
-        icon={Icon.RotateAntiClockwise}
-        shortcut={{ modifiers: ["cmd"], key: "r" }}
-        onAction={handleReset}
-      />
-      <MenuBarExtra.Item
-        title="Reset Merits"
-        icon={Icon.Trash}
-        shortcut={{ modifiers: ["cmd", "shift"], key: "r" }}
-        onAction={handleResetMerits}
-      />
+    <MenuBarExtra icon={icon} isLoading={isEnabledLoading || isSessionsLoading}>
+      <MenuBarExtra.Section title="Settings">
+        <MenuBarExtra.Item
+          title={`Track AI Agent Sessions (${isExtensionEnabled ? "On" : "Off"})`}
+          icon={isExtensionEnabled ? Icon.Checkmark : Icon.XMarkCircle}
+          shortcut={{ modifiers: ["cmd"], key: "t" }}
+          onAction={handleToggleExtension}
+        />
+      </MenuBarExtra.Section>
+
+      <MenuBarExtra.Section title="Sessions">
+        <MenuBarExtra.Item title={`Active Sessions: ${count}`} icon={Icon.Circle} />
+        <MenuBarExtra.Item
+          title="Increment Session Count"
+          icon={Icon.Plus}
+          shortcut={{ modifiers: ["cmd"], key: "i" }}
+          onAction={() => handleUpdate(1)}
+        />
+        <MenuBarExtra.Item
+          title="Decrement Session Count"
+          icon={Icon.Minus}
+          shortcut={{ modifiers: ["cmd"], key: "d" }}
+          onAction={() => handleUpdate(-1)}
+        />
+        <MenuBarExtra.Item
+          title="Reset Session Count"
+          icon={Icon.RotateAntiClockwise}
+          shortcut={{ modifiers: ["cmd"], key: "r" }}
+          onAction={handleReset}
+        />
+      </MenuBarExtra.Section>
+
+      <MenuBarExtra.Section title="Merits">
+        <MenuBarExtra.Item title={`Lifetime Merits: ${merits}`} icon={Icon.Stars} />
+        <MenuBarExtra.Item
+          title="Reset Merits"
+          icon={Icon.Trash}
+          shortcut={{ modifiers: ["cmd", "shift"], key: "r" }}
+          onAction={handleResetMerits}
+        />
+      </MenuBarExtra.Section>
+
+      <MenuBarExtra.Section title="Debug">
+        <MenuBarExtra.Item
+          title="Open State File"
+          icon={Icon.Document}
+          shortcut={{ modifiers: ["cmd"], key: "o" }}
+          onAction={handleOpenStateFile}
+        />
+      </MenuBarExtra.Section>
     </MenuBarExtra>
   );
 }
